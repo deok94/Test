@@ -7,13 +7,13 @@ dic_test = {}
 # dic_test['100'] = '0'
 # dic_test['100'] = '0'
 # dic_test[100] = 0
-rl = []
+rl = [[]]
 
 for i in range(len(relation)) :
-    rl_2 = []
+
     for y in range(len(relation[i])):
 
-        rl.append(relation[i][y])
+        rl[y].append(relation[i][y])
 print(rl)
 
 print(dic_test.items())
