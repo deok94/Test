@@ -1,16 +1,16 @@
+import queue
+
 block = []
 Virus = []
 
 dx = [0,1,0,-1]
 dy = [1,0,-1,0]
 
-pre_count = 0
-
 a = input()
 ay = int(a.split()[0])
 ax = int(a.split()[1])
 array = []
-
+sizee=ay*ax
 def array_reset() :
     array2 = []
     for i in range(len(array)):
@@ -28,7 +28,7 @@ for i in range(int(ay)):
     array.append(idx)
 
 array2 = array
-
+one_size = 0
 for i in range(len(array2)):
     for y in range(len(array2[i])):
         b_location = []
@@ -41,49 +41,61 @@ for i in range(len(array2)):
             v_location.append(i)
             v_location.append(y)
             Virus.append(v_location)
+        else :
+            one_size+=1
 
 answer = 0
-v_stack = []
-print(Virus[0][0],Virus[0][1])
+c_map = {}
+
 for a in range(0,len(block)):
     for b in range(a+1,len(block)):
         for c in range(b+1,len(block)):
             b_array2 = array_reset()
+            q = queue.Queue()
             b_array2[block[a][0]][block[a][1]] = 1
             b_array2[block[b][0]][block[b][1]] = 1
             b_array2[block[c][0]][block[c][1]] = 1
+            duplicate = []
+            for d in Virus:
+                q.put(d)
 
             while True :
                 count = 0
-                Virus[0][0]
 
-                for y in range(len(Virus)):
-                    for x in range(len(Virus[y])):
+                for y in range(q.qsize()):
                         z_count = 0
+                        point = q.get()
+                        # if point in duplicate:
+                        #     print(point)
+                        #     continue
+                        # duplicate.append(point)
+
                         for i in range(0,4):
-                            bx = x+dx[i]
-                            by = y+dy[i]
+                            bx = point[1]+dx[i]
+                            by = point[0]+dy[i]
                             if bx >= 0 and by <= ay-1  and bx <=ax-1  and by >= 0:
                                 ppp = b_array2[by][bx]
-                                if ppp == 0:
 
+                                if ppp == 0:
                                     nv_location = []
                                     nv_location.append(by)
                                     nv_location.append(bx)
                                     b_array2[by][bx] = 2
-                                    v_stack.append(nv_location)
-                for i in b_array2:
-                    for y in i:
-                        if y == 0:
-                            count +=1
+                                    q.put(nv_location)
 
+                if q.qsize() == 0:
+                    # # print(sizee -( len(duplicate) + 3 + one_size))
+                    # count = sizee -( len(duplicate) + 3 + one_size)
+                    for i in b_array2:
+                        for y in i:
+                            if y == 0:
+                                count += 1
 
-                if count == pre_count:
-                    if answer < count:
-                        answer = count
+                    c_map[count] = (count)
                     break
-                pre_count = count
 
+
+answer = max(c_map, key=c_map.get)
 print(answer)
 
 
